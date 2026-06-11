@@ -1,0 +1,776 @@
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@300;400;500;600&display=swap');
+  *{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --navy:#0a1628;--navy2:#122040;--blue:#1a3a6b;--accent:#2563eb;--gold:#c9a84c;
+    --light:#f4f6fb;--white:#fff;--gray:#64748b;--lgray:#e8ecf4;--border:#d1d9e8;
+  }
+  body{font-family:'DM Sans',sans-serif;background:var(--light);color:var(--navy)}
+  .port{max-width:860px;margin:0 auto;background:var(--white)}
+
+  .nav{display:flex;gap:0;border-bottom:2px solid var(--border);background:var(--white);position:sticky;top:0;z-index:100;overflow-x:auto}
+  .nav button{font-family:'DM Sans',sans-serif;font-size:11px;font-weight:500;letter-spacing:.6px;text-transform:uppercase;padding:12px 14px;border:none;background:transparent;color:var(--gray);cursor:pointer;white-space:nowrap;border-bottom:2px solid transparent;margin-bottom:-2px;transition:all .2s}
+  .nav button.active{color:var(--accent);border-bottom-color:var(--accent)}
+  .nav button:hover{color:var(--navy)}
+
+  .page{display:none;animation:fadeIn .3s ease}
+  .page.active{display:block}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+  /* COVER */
+  .cover{background:var(--navy);color:var(--white);min-height:520px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:60px 40px;position:relative;overflow:hidden}
+  .cover::before{content:'';position:absolute;top:-60px;right:-80px;width:320px;height:320px;border-radius:50%;border:1px solid rgba(255,255,255,.08)}
+  .cover::after{content:'';position:absolute;bottom:-80px;left:-60px;width:260px;height:260px;border-radius:50%;border:1px solid rgba(255,255,255,.06)}
+  .cover-badge{background:rgba(37,99,235,.3);border:1px solid rgba(37,99,235,.5);color:#93b8ff;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;padding:6px 16px;border-radius:20px;margin-bottom:28px;display:inline-block}
+  .cover h1{font-family:'Cormorant Garamond',serif;font-size:56px;font-weight:700;letter-spacing:-1px;margin-bottom:12px;line-height:1}
+  .cover-title{font-size:15px;color:#93b8ff;letter-spacing:.5px;margin-bottom:8px;font-weight:400}
+  .cover-sub{font-size:13px;color:rgba(255,255,255,.5);margin-bottom:36px}
+  .cover-divider{width:60px;height:2px;background:var(--gold);margin:0 auto 32px}
+  .cover-tags{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-bottom:36px}
+  .cover-tag{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.7);font-size:12px;padding:5px 14px;border-radius:4px}
+  .cover-contact{font-size:12px;color:rgba(255,255,255,.45);line-height:1.9}
+
+  /* Section layouts */
+  .section{padding:44px 48px}
+  .section+.section{border-top:1px solid var(--border)}
+  .sec-label{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--accent);font-weight:600;margin-bottom:6px}
+  .sec-title{font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:700;color:var(--navy);margin-bottom:28px;line-height:1.1}
+  .sec-title span{color:var(--accent)}
+
+  /* About */
+  .about-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:8px}
+  .about-card{background:var(--light);border:1px solid var(--border);border-radius:8px;padding:20px}
+  .about-card h4{font-size:11px;letter-spacing:1.2px;text-transform:uppercase;color:var(--accent);margin-bottom:10px;font-weight:600}
+  .about-card p{font-size:13.5px;color:var(--gray);line-height:1.7}
+  .about-lead{font-size:15px;color:var(--navy2);line-height:1.8;margin-bottom:24px;border-left:3px solid var(--gold);padding-left:20px}
+
+  /* Stats row */
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:24px 0}
+  .stat{background:var(--navy);color:var(--white);border-radius:8px;padding:18px 14px;text-align:center}
+  .stat-num{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:700;color:var(--gold);display:block}
+  .stat-lbl{font-size:10px;color:rgba(255,255,255,.55);letter-spacing:.8px;text-transform:uppercase;margin-top:4px}
+
+  /* Timeline */
+  .timeline{position:relative;padding-left:28px}
+  .timeline::before{content:'';position:absolute;left:6px;top:8px;bottom:8px;width:1px;background:var(--border)}
+  .tl-item{position:relative;margin-bottom:28px}
+  .tl-dot{width:13px;height:13px;background:var(--accent);border-radius:50%;position:absolute;left:-28px;top:4px;border:2px solid var(--white);box-shadow:0 0 0 2px var(--accent)}
+  .tl-period{font-size:10px;letter-spacing:.8px;text-transform:uppercase;color:var(--accent);font-weight:600;margin-bottom:4px}
+  .tl-org{font-size:15px;font-weight:600;color:var(--navy);margin-bottom:2px}
+  .tl-role{font-size:13px;color:var(--gray);margin-bottom:10px;font-style:italic}
+  .tl-bullets{list-style:none;padding:0}
+  .tl-bullets li{font-size:13px;color:var(--gray);line-height:1.6;padding-left:14px;position:relative;margin-bottom:5px}
+  .tl-bullets li::before{content:'→';position:absolute;left:0;color:var(--gold);font-size:11px;top:2px}
+  .tl-badge{display:inline-block;background:var(--light);border:1px solid var(--border);color:var(--blue);font-size:10px;padding:2px 8px;border-radius:3px;margin-right:5px;margin-top:6px;letter-spacing:.3px}
+
+  /* Education */
+  .edu-cards{display:grid;gap:14px}
+  .edu-card{border:1px solid var(--border);border-radius:8px;padding:20px 24px;display:flex;justify-content:space-between;align-items:flex-start;gap:16px}
+  .edu-card.featured{border-left:4px solid var(--accent);background:linear-gradient(135deg,#f0f4ff,#fff)}
+  .edu-deg{font-size:15px;font-weight:600;color:var(--navy);margin-bottom:3px}
+  .edu-uni{font-size:13px;color:var(--accent);margin-bottom:3px}
+  .edu-loc{font-size:12px;color:var(--gray)}
+  .edu-meta{text-align:right;min-width:110px}
+  .edu-gpa{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:var(--navy);line-height:1}
+  .edu-gpa-lbl{font-size:10px;color:var(--gray);letter-spacing:.5px}
+  .edu-period{font-size:11px;color:var(--gray);margin-top:4px}
+
+  /* Projects */
+  .proj-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .proj-card{border:1px solid var(--border);border-radius:8px;padding:20px;position:relative;overflow:hidden}
+  .proj-card::after{content:'';position:absolute;top:0;left:0;width:4px;height:100%;background:var(--accent)}
+  .proj-num{font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:700;color:var(--lgray);position:absolute;top:12px;right:14px;line-height:1}
+  .proj-tag{font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--accent);font-weight:600;margin-bottom:8px}
+  .proj-title{font-size:14px;font-weight:600;color:var(--navy);margin-bottom:8px;line-height:1.3}
+  .proj-desc{font-size:12.5px;color:var(--gray);line-height:1.6}
+  .proj-tools{margin-top:10px;display:flex;flex-wrap:wrap;gap:5px}
+  .proj-tool{background:var(--light);border:1px solid var(--border);color:var(--blue);font-size:10px;padding:2px 7px;border-radius:3px}
+
+  /* Skills */
+  .skills-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+  .skill-group{background:var(--light);border-radius:8px;padding:20px}
+  .skill-group h4{font-size:11px;letter-spacing:1.2px;text-transform:uppercase;color:var(--navy);font-weight:600;margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+  .skill-bar{margin-bottom:10px}
+  .skill-name{font-size:12.5px;color:var(--gray);margin-bottom:4px;display:flex;justify-content:space-between}
+  .skill-track{background:var(--border);border-radius:2px;height:4px;overflow:hidden}
+  .skill-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--gold));border-radius:2px;transition:width .8s ease}
+  .skill-tags{display:flex;flex-wrap:wrap;gap:7px;margin-top:8px}
+  .skill-tag-item{background:var(--white);border:1px solid var(--border);color:var(--navy2);font-size:12px;padding:5px 12px;border-radius:4px;font-weight:400}
+
+  /* Certs */
+  .cert-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .cert-card{border:1px solid var(--border);border-radius:8px;padding:16px 18px;display:flex;align-items:center;gap:14px}
+  .cert-icon{width:38px;height:38px;background:var(--navy);border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .cert-icon i{color:var(--gold);font-size:18px}
+  .cert-name{font-size:13px;font-weight:500;color:var(--navy);line-height:1.3}
+  .cert-org{font-size:11px;color:var(--gray);margin-top:2px}
+  .cert-year{font-size:10px;color:var(--accent);margin-top:2px;font-weight:600}
+
+  /* Leadership */
+  .lead-items{display:grid;gap:14px}
+  .lead-item{border:1px solid var(--border);border-radius:8px;padding:18px 20px;display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:start}
+  .lead-icon-wrap{width:42px;height:42px;background:var(--navy2);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .lead-icon-wrap i{color:var(--gold);font-size:20px}
+  .lead-role{font-size:14px;font-weight:600;color:var(--navy);margin-bottom:2px}
+  .lead-org{font-size:12px;color:var(--accent);margin-bottom:6px}
+  .lead-desc{font-size:12.5px;color:var(--gray);line-height:1.6}
+
+  /* Achievements */
+  .ach-items{display:grid;gap:12px}
+  .ach-item{border:1px solid var(--border);border-radius:8px;padding:18px 20px;display:flex;gap:16px;align-items:center}
+  .ach-medal{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+  .ach-medal.gold{background:#fff8e1;border:2px solid var(--gold)}
+  .ach-medal.silver{background:#f0f0f0;border:2px solid #999}
+  .ach-medal.blue{background:#eff6ff;border:2px solid var(--accent)}
+  .ach-title{font-size:14px;font-weight:600;color:var(--navy);margin-bottom:3px}
+  .ach-org{font-size:12px;color:var(--gray)}
+  .ach-year{margin-left:auto;font-size:11px;color:var(--accent);font-weight:600;white-space:nowrap}
+
+  /* Contact */
+  .contact-wrap{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+  .contact-info{display:grid;gap:12px}
+  .contact-item{display:flex;align-items:center;gap:12px;padding:14px 16px;border:1px solid var(--border);border-radius:8px}
+  .contact-item i{color:var(--accent);font-size:20px;width:24px;text-align:center}
+  .contact-item-lbl{font-size:10px;text-transform:uppercase;letter-spacing:.8px;color:var(--gray)}
+  .contact-item-val{font-size:13px;font-weight:500;color:var(--navy)}
+  .vision-box{background:var(--navy);color:var(--white);border-radius:8px;padding:28px;display:flex;flex-direction:column;justify-content:center}
+  .vision-box .quote{font-family:'Cormorant Garamond',serif;font-size:18px;font-style:italic;line-height:1.6;color:rgba(255,255,255,.85);margin-bottom:16px}
+  .vision-box .vision-label{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);font-weight:600}
+  .vision-goals{list-style:none;margin-top:16px}
+  .vision-goals li{font-size:12.5px;color:rgba(255,255,255,.6);padding:5px 0;padding-left:16px;position:relative;line-height:1.5}
+  .vision-goals li::before{content:'◆';position:absolute;left:0;color:var(--gold);font-size:7px;top:8px}
+
+  /* GPA visual */
+  .gpa-ring{display:flex;gap:20px;align-items:center;margin-top:16px}
+  svg.ring text{font-family:'DM Sans',sans-serif}
+
+  @media(max-width:600px){
+    .about-grid,.proj-grid,.skills-grid,.cert-grid,.contact-wrap{grid-template-columns:1fr}
+    .stats{grid-template-columns:repeat(2,1fr)}
+    .section{padding:32px 24px}
+    .cover h1{font-size:38px}
+  }
+</style>
+
+<h2 class="sr-only">Finance Portfolio of Suraj Shikalgar, MBA Finance Student at UPES School of Business</h2>
+
+<div class="port">
+  <nav class="nav" role="navigation" aria-label="Portfolio sections">
+    <button class="active" onclick="show('cover')">Cover</button>
+    <button onclick="show('about')">About</button>
+    <button onclick="show('education')">Education</button>
+    <button onclick="show('experience')">Experience</button>
+    <button onclick="show('projects')">Projects</button>
+    <button onclick="show('skills')">Skills</button>
+    <button onclick="show('leadership')">Leadership</button>
+    <button onclick="show('achievements')">Achievements</button>
+    <button onclick="show('certifications')">Certifications</button>
+    <button onclick="show('contact')">Contact</button>
+  </nav>
+
+  <!-- COVER -->
+  <div id="cover" class="page active">
+    <div class="cover">
+      <div class="cover-badge">Finance Portfolio · 2025</div>
+      <h1>Suraj Shikalgar</h1>
+      <div class="cover-title">MBA Finance · UPES School of Business · Dehradun</div>
+      <div class="cover-sub">B.Sc. Chemistry · Dr. D.Y. Patil ACS College, Pune</div>
+      <div class="cover-divider"></div>
+      <div class="cover-tags">
+        <span class="cover-tag">Equity Research</span>
+        <span class="cover-tag">Financial Modeling</span>
+        <span class="cover-tag">Valuation (DCF & Multiples)</span>
+        <span class="cover-tag">Investment Banking</span>
+        <span class="cover-tag">Financial Analysis</span>
+        <span class="cover-tag">Power BI</span>
+      </div>
+      <div class="cover-contact">
+        📍 Kaledhon, Dist. Satara, Maharashtra – 415312<br>
+        📞 +91 9604181152 &nbsp;|&nbsp; ✉️ surajshikalgar356@gmail.com
+      </div>
+    </div>
+    <div class="section" style="background:var(--navy2);color:white;padding:28px 48px;display:flex;gap:32px;align-items:center;justify-content:center;flex-wrap:wrap">
+      <div style="text-align:center"><div style="font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:700;color:var(--gold)">7.8</div><div style="font-size:10px;color:rgba(255,255,255,.5);letter-spacing:.8px;text-transform:uppercase">MBA GPA / 10</div></div>
+      <div style="width:1px;height:40px;background:rgba(255,255,255,.15)"></div>
+      <div style="text-align:center"><div style="font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:700;color:var(--gold)">8.1</div><div style="font-size:10px;color:rgba(255,255,255,.5);letter-spacing:.8px;text-transform:uppercase">B.Sc GPA / 10</div></div>
+      <div style="width:1px;height:40px;background:rgba(255,255,255,.15)"></div>
+      <div style="text-align:center"><div style="font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:700;color:var(--gold)">3+</div><div style="font-size:10px;color:rgba(255,255,255,.5);letter-spacing:.8px;text-transform:uppercase">Finance Models Built</div></div>
+      <div style="width:1px;height:40px;background:rgba(255,255,255,.15)"></div>
+      <div style="text-align:center"><div style="font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:700;color:var(--gold)">6+</div><div style="font-size:10px;color:rgba(255,255,255,.5);letter-spacing:.8px;text-transform:uppercase">Certifications</div></div>
+    </div>
+  </div>
+
+  <!-- ABOUT -->
+  <div id="about" class="page">
+    <div class="section">
+      <div class="sec-label">Professional Summary</div>
+      <div class="sec-title">About <span>Me</span></div>
+      <p class="about-lead">A driven MBA Finance candidate at UPES School of Business with a strong analytical foundation, combining equity research internship experience at QuantScientist Fintech (Profit Idea) with hands-on financial modeling, valuation, and accounting expertise. Passionate about investment banking and capital markets, with a demonstrated ability to build financial models, conduct sector research, and translate data into investment insights.</p>
+      <div class="about-grid">
+        <div class="about-card">
+          <h4>Core Strengths</h4>
+          <p>Rigorous quantitative mindset developed through B.Sc. Chemistry (8.1 GPA) and applied to DCF valuation, ratio analysis, and financial modeling during MBA Finance program and live internships.</p>
+        </div>
+        <div class="about-card">
+          <h4>Industry Exposure</h4>
+          <p>Practical experience spanning equity research (Profit Idea / QuantScientist Fintech), taxation & audit (HA Shikalhat & Company, CA Firm), production operations, and customer engagement roles.</p>
+        </div>
+        <div class="about-card">
+          <h4>Technical Profile</h4>
+          <p>Proficient in advanced Excel (financial modeling, pivot tables), Power BI dashboards, Tally Prime, Python, SQL, and R. Applied AI tools for financial prompt engineering and data automation.</p>
+        </div>
+        <div class="about-card">
+          <h4>Leadership Record</h4>
+          <p>Team Head of the Event Management vertical at UPES Buzz Communication Society; PR Group Lead at FIPI (Federation of Indian Petroleum Industry) Committee, UPES. First Runner-Up, Textify Analytics Case Study Challenge.</p>
+        </div>
+      </div>
+      <div class="stats">
+        <div class="stat"><span class="stat-num">2+</span><div class="stat-lbl">Internships</div></div>
+        <div class="stat"><span class="stat-num">5+</span><div class="stat-lbl">Finance Projects</div></div>
+        <div class="stat"><span class="stat-num">6+</span><div class="stat-lbl">Certifications</div></div>
+        <div class="stat"><span class="stat-num">2</span><div class="stat-lbl">Case Study Awards</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EDUCATION -->
+  <div id="education" class="page">
+    <div class="section">
+      <div class="sec-label">Academic Background</div>
+      <div class="sec-title">Education</div>
+      <div class="edu-cards">
+        <div class="edu-card featured">
+          <div>
+            <div class="edu-deg">MBA – Finance (General Management)</div>
+            <div class="edu-uni">UPES School of Business · Dehradun, Uttarakhand</div>
+            <div class="edu-loc">Pursuing · Jun 2024 – Jun 2026 (Expected)</div>
+            <div style="margin-top:10px;display:flex;flex-wrap:wrap;gap:6px">
+              <span class="tl-badge">Corporate Finance</span><span class="tl-badge">Financial Modeling</span><span class="tl-badge">Equity Research</span><span class="tl-badge">Valuation</span><span class="tl-badge">Investment Banking</span>
+            </div>
+          </div>
+          <div class="edu-meta">
+            <div class="edu-gpa">7.8</div>
+            <div class="edu-gpa-lbl">GPA / 10.0</div>
+            <div class="edu-period">Sem 1–3 Completed</div>
+          </div>
+        </div>
+        <div class="edu-card">
+          <div>
+            <div class="edu-deg">B.Sc. Chemistry (Honours)</div>
+            <div class="edu-uni">Dr. D.Y. Patil ACS College · Pune, Maharashtra</div>
+            <div class="edu-loc">Jun 2020 – Oct 2023</div>
+            <div style="margin-top:10px;display:flex;flex-wrap:wrap;gap:6px">
+              <span class="tl-badge">Analytical Thinking</span><span class="tl-badge">Research Methods</span><span class="tl-badge">Statistics</span>
+            </div>
+          </div>
+          <div class="edu-meta">
+            <div class="edu-gpa">8.1</div>
+            <div class="edu-gpa-lbl">GPA / 10.0</div>
+          </div>
+        </div>
+        <div class="edu-card">
+          <div>
+            <div class="edu-deg">12th Science (HSC)</div>
+            <div class="edu-uni">Modern College · Vita, Maharashtra</div>
+            <div class="edu-loc">Jun 2017 – Jun 2018</div>
+          </div>
+          <div class="edu-meta">
+            <div class="edu-gpa">55.69%</div>
+            <div class="edu-gpa-lbl">Percentage</div>
+          </div>
+        </div>
+        <div class="edu-card">
+          <div>
+            <div class="edu-deg">10th (SSC)</div>
+            <div class="edu-uni">Vidya Vikas Mandir · Satara, Maharashtra</div>
+            <div class="edu-loc">Jun 2015 – Jun 2016</div>
+          </div>
+          <div class="edu-meta">
+            <div class="edu-gpa">76.80%</div>
+            <div class="edu-gpa-lbl">Percentage</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top:32px">
+        <div style="font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--accent);font-weight:600;margin-bottom:16px">GPA Progression · MBA Semesters</div>
+        <div style="display:flex;gap:12px;align-items:flex-end;height:80px">
+          <div style="display:flex;flex-direction:column;align-items:center;gap:4px">
+            <div style="font-size:11px;font-weight:600;color:var(--navy)">7.5</div>
+            <div style="width:48px;background:var(--accent);border-radius:4px 4px 0 0;height:60px"></div>
+            <div style="font-size:10px;color:var(--gray)">Sem 1</div>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:4px">
+            <div style="font-size:11px;font-weight:600;color:var(--navy)">7.8</div>
+            <div style="width:48px;background:var(--accent);border-radius:4px 4px 0 0;height:62px;opacity:.85"></div>
+            <div style="font-size:10px;color:var(--gray)">Sem 2</div>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:4px">
+            <div style="font-size:11px;font-weight:600;color:var(--gold)">8.2*</div>
+            <div style="width:48px;background:var(--gold);border-radius:4px 4px 0 0;height:66px;opacity:.9"></div>
+            <div style="font-size:10px;color:var(--gray)">Sem 3</div>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:4px">
+            <div style="font-size:11px;font-weight:600;color:var(--gray)">—</div>
+            <div style="width:48px;background:var(--lgray);border-radius:4px 4px 0 0;height:40px;border:1px dashed var(--border)"></div>
+            <div style="font-size:10px;color:var(--gray)">Sem 4</div>
+          </div>
+          <div style="font-size:11px;color:var(--gray);align-self:flex-end;padding-bottom:20px;margin-left:8px">*Projected based on internship performance</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EXPERIENCE -->
+  <div id="experience" class="page">
+    <div class="section">
+      <div class="sec-label">Work History</div>
+      <div class="sec-title">Professional <span>Experience</span></div>
+      <div class="timeline">
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-period">Jun 2025 – Jul 2025 · Gurugram, Haryana</div>
+          <div class="tl-org">Profit Idea (QuantScientist Fintech Pvt. Ltd.)</div>
+          <div class="tl-role">Equity Research Analyst Intern — Reporting to Mr. Varun Aggarwal, CMD</div>
+          <ul class="tl-bullets">
+            <li>Conducted equity research, investment analysis, and industry benchmarking for LIC and 5+ peer companies across sectors</li>
+            <li>Built 3+ financial models covering DCF valuation, relative valuation (P/E, EV/EBITDA), and WACC estimation</li>
+            <li>Performed financial statement analysis, profitability analysis, and ratio analysis using 10+ valuation metrics to identify pricing gaps</li>
+            <li>Developed 2+ Power BI dashboards for financial reporting, KPI tracking, trend analysis, and data visualization</li>
+            <li>Studied derivatives strategies, Opstra analytics, LBO models, chart patterns, and sector research methodologies</li>
+            <li>Executed practical stock analysis in Excel; gained live trading exposure via Rudra Shares brokerage platform</li>
+          </ul>
+          <div>
+            <span class="tl-badge">DCF Valuation</span><span class="tl-badge">Equity Research</span><span class="tl-badge">Power BI</span><span class="tl-badge">LBO</span><span class="tl-badge">Derivatives</span><span class="tl-badge">Excel Modeling</span>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-period">Jun 2025 – Jul 2025 · Vita, Maharashtra</div>
+          <div class="tl-org">HA Shikalhat & Company — Chartered Accountants</div>
+          <div class="tl-role">Taxation & Accounting Intern</div>
+          <ul class="tl-bullets">
+            <li>Prepared 10+ balance sheets, CMA reports, and financial statements using Tally Prime and Excel</li>
+            <li>Assisted in GST compliance, ITR filing, and tax documentation; improved reporting accuracy across multiple client accounts</li>
+            <li>Conducted financial record verification, reconciliation, and audit documentation for compliance activities</li>
+            <li>Contributed to management reporting and financial analysis to support business decision-making</li>
+          </ul>
+          <div>
+            <span class="tl-badge">Tally Prime</span><span class="tl-badge">Suvit</span><span class="tl-badge">Taxbase</span><span class="tl-badge">CMA Reports</span><span class="tl-badge">ITR Filing</span><span class="tl-badge">GST</span>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot" style="background:var(--gray)"></div>
+          <div class="tl-period">Jun 2022 – Nov 2022 · Pune, Maharashtra</div>
+          <div class="tl-org">Q Connect</div>
+          <div class="tl-role">Customer Service Executive (Telecaller)</div>
+          <ul class="tl-bullets">
+            <li>Executed 60+ outbound calls daily, reaching 1,000+ prospects during tenure</li>
+            <li>Converted 30+ qualified leads into sales through structured follow-ups, negotiation, and customer analysis</li>
+            <li>Improved customer conversion rate by 18% through relationship management and communication strategies</li>
+            <li>Achieved 95–105% monthly sales targets; managed 150+ CRM records improving follow-up efficiency by 20%</li>
+          </ul>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot" style="background:var(--gray)"></div>
+          <div class="tl-period">Jul 2020 – Aug 2021 · Vita, Maharashtra</div>
+          <div class="tl-org">HF Flex Pvt. Ltd.</div>
+          <div class="tl-role">Production Planning & Control (Lab Chemist / Operations)</div>
+          <ul class="tl-bullets">
+            <li>Maintained 95–100% daily production efficiency through structured production scheduling and operational forecasting</li>
+            <li>Managed 200+ SKU inventory records, reducing stock mismatch by 15% through inventory analysis</li>
+            <li>Developed 25+ MIS reports and variance analysis reports identifying operational gaps</li>
+            <li>Coordinated with 4+ departments, improving workflow efficiency by 10% through process optimization</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROJECTS -->
+  <div id="projects" class="page">
+    <div class="section">
+      <div class="sec-label">Academic & Finance Projects</div>
+      <div class="sec-title">Key <span>Projects</span></div>
+      <div class="proj-grid">
+        <div class="proj-card">
+          <div class="proj-num">01</div>
+          <div class="proj-tag">Equity Research · Valuation</div>
+          <div class="proj-title">Equity Research & Financial Valuation — Listed Companies</div>
+          <div class="proj-desc">Conducted comprehensive equity research and investment analysis for LIC and 5+ sector peers. Built 3+ financial models encompassing financial forecasting, DCF valuation, relative valuation, and WACC estimation. Performed profitability analysis and ratio benchmarking using 10+ valuation metrics.</div>
+          <div class="proj-tools"><span class="proj-tool">DCF</span><span class="proj-tool">WACC</span><span class="proj-tool">EV/EBITDA</span><span class="proj-tool">Power BI</span><span class="proj-tool">Excel</span></div>
+        </div>
+        <div class="proj-card">
+          <div class="proj-num">02</div>
+          <div class="proj-tag">Corporate Finance</div>
+          <div class="proj-title">Corporate Finance Analysis — Reliance Industries Ltd.</div>
+          <div class="proj-desc">Prepared a detailed corporate finance assignment analyzing Reliance Industries' capital structure, WACC, dividend policy, and investment decisions. Reviewed P&L, balance sheet, and cash flow statements to assess financial health and strategic positioning.</div>
+          <div class="proj-tools"><span class="proj-tool">Capital Structure</span><span class="proj-tool">WACC</span><span class="proj-tool">Ratio Analysis</span><span class="proj-tool">Excel</span></div>
+        </div>
+        <div class="proj-card">
+          <div class="proj-num">03</div>
+          <div class="proj-tag">Financial Projection · Modeling</div>
+          <div class="proj-title">Financial Projection & Valuation Case Study</div>
+          <div class="proj-desc">End-to-end financial modeling exercise including DCF, comparable company multiples, 3-statement model (P&L, Balance Sheet, Cash Flow), and scenario analysis. Applied sensitivity analysis for key financial drivers to assess valuation ranges.</div>
+          <div class="proj-tools"><span class="proj-tool">DCF</span><span class="proj-tool">3-Statement Model</span><span class="proj-tool">Sensitivity Analysis</span><span class="proj-tool">Multiples</span></div>
+        </div>
+        <div class="proj-card">
+          <div class="proj-num">04</div>
+          <div class="proj-tag">Feasibility Analysis</div>
+          <div class="proj-title">Business Feasibility Report — CollegeTips</div>
+          <div class="proj-desc">Conducted a comprehensive feasibility analysis for CollegeTips, evaluating market opportunity, operational viability, cost structure, revenue projections, and break-even analysis. Assessed competitive landscape and go-to-market strategy.</div>
+          <div class="proj-tools"><span class="proj-tool">Market Research</span><span class="proj-tool">Revenue Modeling</span><span class="proj-tool">Break-Even</span><span class="proj-tool">Excel</span></div>
+        </div>
+        <div class="proj-card">
+          <div class="proj-num">05</div>
+          <div class="proj-tag">Digital Strategy</div>
+          <div class="proj-title">Digital Transformation Analysis — BMW</div>
+          <div class="proj-desc">Analyzed BMW's digital transformation journey, evaluating the financial impact of EV transition, technology investments, and R&D expenditure. Assessed strategic initiatives including autonomous driving, connected mobility, and their implications for shareholder value.</div>
+          <div class="proj-tools"><span class="proj-tool">Strategic Analysis</span><span class="proj-tool">Industry Research</span><span class="proj-tool">Valuation Impact</span></div>
+        </div>
+        <div class="proj-card">
+          <div class="proj-num">06</div>
+          <div class="proj-tag">Economic Research</div>
+          <div class="proj-title">4-Day Workweek in India: Productivity & Employment Impact</div>
+          <div class="proj-desc">Primary and secondary research study examining the macroeconomic implications of a 4-day workweek policy in India. Analyzed productivity metrics, labor market elasticity, GDP impact scenarios, and sector-specific employment effects using SPSS for statistical analysis.</div>
+          <div class="proj-tools"><span class="proj-tool">SPSS</span><span class="proj-tool">Macro Research</span><span class="proj-tool">Labor Economics</span><span class="proj-tool">Data Analysis</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SKILLS -->
+  <div id="skills" class="page">
+    <div class="section">
+      <div class="sec-label">Technical & Finance Skills</div>
+      <div class="sec-title">Skills <span>Profile</span></div>
+      <div class="skills-grid">
+        <div class="skill-group">
+          <h4>Finance & Analytical Skills</h4>
+          <div class="skill-bar"><div class="skill-name"><span>Financial Modeling (DCF, 3-Statement)</span><span>90%</span></div><div class="skill-track"><div class="skill-fill" style="width:90%"></div></div></div>
+          <div class="skill-bar"><div class="skill-name"><span>Equity Research & Valuation</span><span>85%</span></div><div class="skill-track"><div class="skill-fill" style="width:85%"></div></div></div>
+          <div class="skill-bar"><div class="skill-name"><span>Financial Statement Analysis</span><span>88%</span></div><div class="skill-track"><div class="skill-fill" style="width:88%"></div></div></div>
+          <div class="skill-bar"><div class="skill-name"><span>Ratio & Profitability Analysis</span><span>85%</span></div><div class="skill-track"><div class="skill-fill" style="width:85%"></div></div></div>
+          <div class="skill-bar"><div class="skill-name"><span>Taxation & Accounting (GST, ITR)</span><span>80%</span></div><div class="skill-track"><div class="skill-fill" style="width:80%"></div></div></div>
+        </div>
+        <div class="skill-group">
+          <h4>Technical Tools</h4>
+          <div class="skill-bar"><div class="skill-name"><span>Microsoft Excel (Advanced)</span><span>92%</span></div><div class="skill-track"><div class="skill-fill" style="width:92%"></div></div></div>
+          <div class="skill-bar"><div class="skill-name"><span>Tally Prime (Advanced)</span><span>88%</span></div><div class="skill-track"><div class="skill-fill" style="width:88%"></div></div></div>
+          <div class="skill-bar"><div class="skill-name"><span>Power BI</span><span>80%</span></div><div class="skill-track"><div class="skill-fill" style="width:80%"></div></div></div>
+          <div class="skill-bar"><div class="skill-name"><span>Python</span><span>70%</span></div><div class="skill-track"><div class="skill-fill" style="width:70%"></div></div></div>
+          <div class="skill-bar"><div class="skill-name"><span>SQL & R Language</span><span>68%</span></div><div class="skill-track"><div class="skill-fill" style="width:68%"></div></div></div>
+        </div>
+      </div>
+      <div style="margin-top:24px">
+        <div style="font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--accent);font-weight:600;margin-bottom:12px">All Skills</div>
+        <div class="skill-tags">
+          <span class="skill-tag-item">Financial Analysis</span>
+          <span class="skill-tag-item">Equity Research</span>
+          <span class="skill-tag-item">DCF Valuation</span>
+          <span class="skill-tag-item">Relative Valuation</span>
+          <span class="skill-tag-item">LBO Modeling</span>
+          <span class="skill-tag-item">WACC</span>
+          <span class="skill-tag-item">Financial Modeling</span>
+          <span class="skill-tag-item">3-Statement Modeling</span>
+          <span class="skill-tag-item">Excel (Advanced)</span>
+          <span class="skill-tag-item">Power BI</span>
+          <span class="skill-tag-item">Tally Prime</span>
+          <span class="skill-tag-item">Python</span>
+          <span class="skill-tag-item">SQL</span>
+          <span class="skill-tag-item">R Language</span>
+          <span class="skill-tag-item">SPSS</span>
+          <span class="skill-tag-item">SAP FI</span>
+          <span class="skill-tag-item">Suvit</span>
+          <span class="skill-tag-item">Taxbase</span>
+          <span class="skill-tag-item">GST / ITR / Audit</span>
+          <span class="skill-tag-item">Market Research</span>
+          <span class="skill-tag-item">Derivatives & Options</span>
+          <span class="skill-tag-item">Opstra Strategies</span>
+          <span class="skill-tag-item">AI Tools for Finance</span>
+          <span class="skill-tag-item">Prompt Engineering</span>
+          <span class="skill-tag-item">Leadership</span>
+          <span class="skill-tag-item">Communication</span>
+          <span class="skill-tag-item">Problem Solving</span>
+        </div>
+      </div>
+      <div style="margin-top:24px;display:flex;gap:12px;flex-wrap:wrap">
+        <div style="flex:1;min-width:160px;background:var(--navy);border-radius:8px;padding:16px 18px;color:white">
+          <div style="font-size:10px;text-transform:uppercase;letter-spacing:.8px;color:rgba(255,255,255,.5);margin-bottom:4px">Languages</div>
+          <div style="font-size:13px;color:rgba(255,255,255,.85)">English · Hindi · Marathi<br><span style="font-size:11px;color:rgba(255,255,255,.4)">(All fluent)</span></div>
+        </div>
+        <div style="flex:1;min-width:160px;background:var(--light);border:1px solid var(--border);border-radius:8px;padding:16px 18px">
+          <div style="font-size:10px;text-transform:uppercase;letter-spacing:.8px;color:var(--accent);margin-bottom:4px">Domains</div>
+          <div style="font-size:13px;color:var(--gray)">Investment Banking · Capital Markets · Asset Management · Corporate Finance</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LEADERSHIP -->
+  <div id="leadership" class="page">
+    <div class="section">
+      <div class="sec-label">Positions of Responsibility</div>
+      <div class="sec-title">Leadership <span>&amp; Activities</span></div>
+      <div class="lead-items">
+        <div class="lead-item">
+          <div class="lead-icon-wrap"><i class="ti ti-speakerphone" aria-hidden="true"></i></div>
+          <div>
+            <div class="lead-role">Team Head — Event Management Vertical</div>
+            <div class="lead-org">Buzz — The Communication Society, UPES · Dehradun</div>
+            <div class="lead-desc">Led a team responsible for planning, coordinating, and executing major student events and communications activities at UPES. Managed end-to-end event logistics, stakeholder coordination, and on-ground execution while overseeing a team of volunteers. Drove seamless event delivery across multiple large-scale campus events.</div>
+          </div>
+        </div>
+        <div class="lead-item">
+          <div class="lead-icon-wrap"><i class="ti ti-shield-check" aria-hidden="true"></i></div>
+          <div>
+            <div class="lead-role">Discipline Department Member</div>
+            <div class="lead-org">Buzz Communication Society, UPES · Dehradun</div>
+            <div class="lead-desc">Maintained decorum and operational discipline during society events. Collaborated with core committee members to ensure smooth functioning of events, enforce protocols, and coordinate between teams.</div>
+          </div>
+        </div>
+        <div class="lead-item">
+          <div class="lead-icon-wrap"><i class="ti ti-building-factory-2" aria-hidden="true"></i></div>
+          <div>
+            <div class="lead-role">Team Head — PR Group</div>
+            <div class="lead-org">Committee of Industrial Relations, Federation of Indian Petroleum Industry (FIPI) · UPES</div>
+            <div class="lead-desc">Led PR team coordination, external communications, and promotional activities for the FIPI student committee at UPES. Demonstrated leadership, stakeholder management, and institutional networking skills. Represented the committee in industry interactions and inter-institutional engagements.</div>
+          </div>
+        </div>
+        <div class="lead-item">
+          <div class="lead-icon-wrap"><i class="ti ti-trophy" aria-hidden="true"></i></div>
+          <div>
+            <div class="lead-role">Case Study Competitor</div>
+            <div class="lead-org">Multiple Competitions — IIT Indore, Textify Analytics &amp; Others</div>
+            <div class="lead-desc">Actively participated in case study competitions across institutions, applying finance, strategy, and business analysis frameworks to real-world problems. Secured recognition at Textify Analytics Case Study Challenge (First Runner-Up) and qualified as a Finalist at E-Summit'25 Case Chronicles at IIT Indore.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ACHIEVEMENTS -->
+  <div id="achievements" class="page">
+    <div class="section">
+      <div class="sec-label">Awards & Recognition</div>
+      <div class="sec-title">Achievements <span>&amp; Competitions</span></div>
+      <div class="ach-items">
+        <div class="ach-item">
+          <div class="ach-medal silver"><i class="ti ti-medal" style="font-size:22px;color:#888"></i></div>
+          <div>
+            <div class="ach-title">First Runner-Up — Case Study Challenge</div>
+            <div class="ach-org">Textify Analytics · 2025</div>
+          </div>
+          <div class="ach-year">2025</div>
+        </div>
+        <div class="ach-item">
+          <div class="ach-medal blue"><i class="ti ti-certificate" style="font-size:20px;color:var(--accent)"></i></div>
+          <div>
+            <div class="ach-title">Finalist — Case Chronicles, E-Summit'25</div>
+            <div class="ach-org">IIT Indore · Student Affairs Section · Aug 30–31, 2025</div>
+          </div>
+          <div class="ach-year">2025</div>
+        </div>
+        <div class="ach-item">
+          <div class="ach-medal gold"><i class="ti ti-chart-line" style="font-size:20px;color:var(--gold)"></i></div>
+          <div>
+            <div class="ach-title">Equity Research Internship — QuantScientist Fintech Pvt. Ltd.</div>
+            <div class="ach-org">Profit Idea · Agreement No. QFPL/IA/2025/0206 · Jun–Jul 2025</div>
+          </div>
+          <div class="ach-year">2025</div>
+        </div>
+        <div class="ach-item">
+          <div class="ach-medal blue"><i class="ti ti-users" style="font-size:20px;color:var(--accent)"></i></div>
+          <div>
+            <div class="ach-title">Team Head — UPES Buzz Communication Society</div>
+            <div class="ach-org">Event Management Vertical · UPES Dehradun</div>
+          </div>
+          <div class="ach-year">2024–25</div>
+        </div>
+        <div class="ach-item">
+          <div class="ach-medal blue"><i class="ti ti-building-factory-2" style="font-size:20px;color:var(--accent)"></i></div>
+          <div>
+            <div class="ach-title">Team Head — PR Group, FIPI Committee</div>
+            <div class="ach-org">Federation of Indian Petroleum Industry · UPES</div>
+          </div>
+          <div class="ach-year">2024–25</div>
+        </div>
+      </div>
+
+      <div style="margin-top:32px;background:var(--light);border-radius:8px;padding:24px">
+        <div style="font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--accent);font-weight:600;margin-bottom:16px">Academic Excellence</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+          <div style="display:flex;align-items:center;gap:10px">
+            <div style="width:6px;height:6px;background:var(--gold);border-radius:50%;flex-shrink:0"></div>
+            <div style="font-size:13px;color:var(--gray)">B.Sc. Chemistry — 8.1 GPA / 10.0 (Dr. D.Y. Patil ACS College)</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px">
+            <div style="width:6px;height:6px;background:var(--gold);border-radius:50%;flex-shrink:0"></div>
+            <div style="font-size:13px;color:var(--gray)">MBA Finance — 7.8 GPA / 10.0 (UPES, Sems 1–3)</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px">
+            <div style="width:6px;height:6px;background:var(--accent);border-radius:50%;flex-shrink:0"></div>
+            <div style="font-size:13px;color:var(--gray)">SSC — 76.80% (Vidya Vikas Mandir, Satara)</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px">
+            <div style="width:6px;height:6px;background:var(--accent);border-radius:50%;flex-shrink:0"></div>
+            <div style="font-size:13px;color:var(--gray)">Consistently improved GPA across academic career</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CERTIFICATIONS -->
+  <div id="certifications" class="page">
+    <div class="section">
+      <div class="sec-label">Professional Development</div>
+      <div class="sec-title">Certifications <span>&amp; Tools</span></div>
+      <div class="cert-grid">
+        <div class="cert-card">
+          <div class="cert-icon"><i class="ti ti-table" aria-hidden="true"></i></div>
+          <div>
+            <div class="cert-name">Advanced Excel for Finance</div>
+            <div class="cert-org">Disha Institute</div>
+            <div class="cert-year">2022</div>
+          </div>
+        </div>
+        <div class="cert-card">
+          <div class="cert-icon"><i class="ti ti-code" aria-hidden="true"></i></div>
+          <div>
+            <div class="cert-name">Python Programming</div>
+            <div class="cert-org">Learn Vern</div>
+            <div class="cert-year">2025</div>
+          </div>
+        </div>
+        <div class="cert-card">
+          <div class="cert-icon"><i class="ti ti-database" aria-hidden="true"></i></div>
+          <div>
+            <div class="cert-name">SQL for Data Science</div>
+            <div class="cert-org">Coursera</div>
+            <div class="cert-year">2025</div>
+          </div>
+        </div>
+        <div class="cert-card">
+          <div class="cert-icon"><i class="ti ti-chart-dots" aria-hidden="true"></i></div>
+          <div>
+            <div class="cert-name">Power BI for Analytics</div>
+            <div class="cert-org">Tutedude</div>
+            <div class="cert-year">2025</div>
+          </div>
+        </div>
+        <div class="cert-card">
+          <div class="cert-icon"><i class="ti ti-robot" aria-hidden="true"></i></div>
+          <div>
+            <div class="cert-name">Prompt Engineering for AI</div>
+            <div class="cert-org">Coursera</div>
+            <div class="cert-year">2025</div>
+          </div>
+        </div>
+        <div class="cert-card">
+          <div class="cert-icon"><i class="ti ti-building" aria-hidden="true"></i></div>
+          <div>
+            <div class="cert-name">SAP Financials — Essential Training</div>
+            <div class="cert-org">LinkedIn Learning</div>
+            <div class="cert-year">2025</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top:32px">
+        <div style="font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--accent);font-weight:600;margin-bottom:16px">Tools & Platforms</div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px">
+          <div style="border:1px solid var(--border);border-radius:6px;padding:12px;text-align:center;background:var(--white)">
+            <i class="ti ti-table" style="font-size:22px;color:var(--accent);display:block;margin-bottom:6px" aria-hidden="true"></i>
+            <div style="font-size:12px;font-weight:500;color:var(--navy)">MS Excel</div>
+            <div style="font-size:10px;color:var(--gray)">Advanced</div>
+          </div>
+          <div style="border:1px solid var(--border);border-radius:6px;padding:12px;text-align:center;background:var(--white)">
+            <i class="ti ti-chart-bar" style="font-size:22px;color:var(--accent);display:block;margin-bottom:6px" aria-hidden="true"></i>
+            <div style="font-size:12px;font-weight:500;color:var(--navy)">Power BI</div>
+            <div style="font-size:10px;color:var(--gray)">Intermediate</div>
+          </div>
+          <div style="border:1px solid var(--border);border-radius:6px;padding:12px;text-align:center;background:var(--white)">
+            <i class="ti ti-calculator" style="font-size:22px;color:var(--accent);display:block;margin-bottom:6px" aria-hidden="true"></i>
+            <div style="font-size:12px;font-weight:500;color:var(--navy)">Tally Prime</div>
+            <div style="font-size:10px;color:var(--gray)">Advanced</div>
+          </div>
+          <div style="border:1px solid var(--border);border-radius:6px;padding:12px;text-align:center;background:var(--white)">
+            <i class="ti ti-code" style="font-size:22px;color:var(--accent);display:block;margin-bottom:6px" aria-hidden="true"></i>
+            <div style="font-size:12px;font-weight:500;color:var(--navy)">Python</div>
+            <div style="font-size:10px;color:var(--gray)">Intermediate</div>
+          </div>
+          <div style="border:1px solid var(--border);border-radius:6px;padding:12px;text-align:center;background:var(--white)">
+            <i class="ti ti-database" style="font-size:22px;color:var(--accent);display:block;margin-bottom:6px" aria-hidden="true"></i>
+            <div style="font-size:12px;font-weight:500;color:var(--navy)">SQL</div>
+            <div style="font-size:10px;color:var(--gray)">Intermediate</div>
+          </div>
+          <div style="border:1px solid var(--border);border-radius:6px;padding:12px;text-align:center;background:var(--white)">
+            <i class="ti ti-building" style="font-size:22px;color:var(--accent);display:block;margin-bottom:6px" aria-hidden="true"></i>
+            <div style="font-size:12px;font-weight:500;color:var(--navy)">SAP FI</div>
+            <div style="font-size:10px;color:var(--gray)">Fundamentals</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTACT -->
+  <div id="contact" class="page">
+    <div class="section">
+      <div class="sec-label">Get In Touch</div>
+      <div class="sec-title">Contact <span>&amp; Vision</span></div>
+      <div class="contact-wrap">
+        <div class="contact-info">
+          <div class="contact-item">
+            <i class="ti ti-user" aria-hidden="true"></i>
+            <div><div class="contact-item-lbl">Full Name</div><div class="contact-item-val">Suraj Shikalgar</div></div>
+          </div>
+          <div class="contact-item">
+            <i class="ti ti-mail" aria-hidden="true"></i>
+            <div><div class="contact-item-lbl">Email</div><div class="contact-item-val">surajshikalgar356@gmail.com</div></div>
+          </div>
+          <div class="contact-item">
+            <i class="ti ti-phone" aria-hidden="true"></i>
+            <div><div class="contact-item-lbl">Mobile</div><div class="contact-item-val">+91 9604181152</div></div>
+          </div>
+          <div class="contact-item">
+            <i class="ti ti-map-pin" aria-hidden="true"></i>
+            <div><div class="contact-item-lbl">Location</div><div class="contact-item-val">Kaledhon, Dist. Satara, Maharashtra – 415312</div></div>
+          </div>
+          <div class="contact-item">
+            <i class="ti ti-school" aria-hidden="true"></i>
+            <div><div class="contact-item-lbl">Institution</div><div class="contact-item-val">UPES School of Business, Dehradun</div></div>
+          </div>
+          <div class="contact-item">
+            <i class="ti ti-id-badge" aria-hidden="true"></i>
+            <div><div class="contact-item-lbl">Student ID</div><div class="contact-item-val">590010130</div></div>
+          </div>
+        </div>
+        <div class="vision-box">
+          <div class="vision-label">Career Vision</div>
+          <div class="quote" style="margin-top:12px">"To build a career at the intersection of capital markets and corporate strategy — where analytical rigor meets impactful investment decisions."</div>
+          <ul class="vision-goals">
+            <li>Secure a role in Investment Banking or Equity Research at a leading financial institution</li>
+            <li>Develop expertise in M&A advisory, LBO modeling, and sector-specific coverage</li>
+            <li>Progress toward CFA charterholder designation to deepen investment knowledge</li>
+            <li>Contribute to capital allocation decisions that drive sustainable business growth</li>
+            <li>Long-term: Build a track record in Portfolio Management or PE/VC investing</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function show(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  const btns=[...document.querySelectorAll('.nav button')];
+  const labels={cover:'Cover',about:'About',education:'Education',experience:'Experience',projects:'Projects',skills:'Skills',leadership:'Leadership',achievements:'Achievements',certifications:'Certifications',contact:'Contact'};
+  btns.forEach(b=>{if(b.textContent.trim()===labels[id])b.classList.add('active')});
+}
+</script>
